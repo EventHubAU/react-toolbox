@@ -225,7 +225,7 @@ const factory = (Chip, Input) => {
      return valueMap;
    }
 
-   select = (event, target) => {
+   select (event, target) {
      events.pauseEvent(event);
      const values = this.values(this.props.value);
      const newValue = target === void 0 ? event.target.id : target;

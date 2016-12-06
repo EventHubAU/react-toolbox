@@ -1,6 +1,6 @@
 # Tabs
 
-[Tabs](https://www.google.com/design/spec/components/tabs.html) make it easy to explore and switch between different views or functional aspects of an app or to browse categorized data sets.  Tabs are composed with their content, but only the active tab's content is rendered.  In the future, we may add the ability to render headers only, with event listeners.
+[Tabs](https://material.google.com/components/tabs.html) make it easy to explore and switch between different views or functional aspects of an app or to browse categorized data sets.  Tabs are composed with their content, but only the active tab's content is rendered.  In the future, we may add the ability to render headers only, with event listeners.
 
 <!-- example -->
 ```jsx
@@ -71,6 +71,7 @@ This component acts as the wrapper and the main controller of the content that i
 | `className`                   | `String`        | `''`            | Additional class name to provide custom styling.|
 | `disableAnimatedBottomBorder` | `Boolean`       | `false`         | Disable the animation below the active tab.|
 | `fixed`                       | `Boolean`       | `false`         | If True, the tabs will be 'fixed tabs'.|
+| `hideMode`                    | `enum`(`'display'`,`'unmounted'`) | `unmounted`         | `unmounted` mode will not mount the tab content of inactive tabs. `display` mode will mount but hide inactive tabs. Consider holding state outside of the Tabs component before using `display` mode |
 | `index`                       | `Number`        | `0`             | Current <Tab> |
 | `inverse`                     | `Boolean`       | `false`         | If True, the tabs will have an inverse style.|
 | `onChange`                    | `Function`      |                 | Callback function that is fired when the tab changes.|
@@ -100,9 +101,12 @@ Represent a single tab element and it should include some properties to describe
 | `className`       | `String`        | `''`            | Additional class name to provide custom styling for each tab.|
 | `disabled`        | `Boolean`       | `false`         | If true, the current component is not clickable.|
 | `hidden`          | `Boolean`       | `false`         | If true, the current component is not visible.|
-| `label`           | `String`        |                 | Label text for navigation header. Required. |
+| `icon`            | `String`        |                 | Icon for navigation header. |
+| `label`           | `String`        |                 | Label text for navigation header. |
 | `onActive`        | `Function`      |                 | Callback function that is fired when the tab is activated. |
 | `onClick`         | `Function`      |                 | Callback function that is fired when the tab is clicked. |
+
+It is required to provide either a label or an icon (or both).
 
 ### Theme
 

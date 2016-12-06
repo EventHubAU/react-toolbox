@@ -10,7 +10,10 @@ const DIRECTION_STEPS = { left: -1, right: 1 };
 const factory = (IconButton) => {
   class Calendar extends Component {
     static propTypes = {
+      disabledDates: React.PropTypes.array,
       display: PropTypes.oneOf(['months', 'years']),
+      enabledDates: React.PropTypes.array,
+      handleSelect: PropTypes.func,
       locale: React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.object
@@ -39,10 +42,18 @@ const factory = (IconButton) => {
       viewDate: this.props.selectedDate
     };
 
+    componentWillMount () {
+      document.body.addEventListener('keydown', this.handleKeys);
+    }
+
     componentDidUpdate () {
       if (this.refs.activeYear) {
         this.scrollToActive();
       }
+    }
+
+    componentWillUnmount () {
+      document.body.removeEventListener('keydown', this.handleKeys);
     }
 
     scrollToActive () {
@@ -56,14 +67,34 @@ const factory = (IconButton) => {
     };
 
     handleYearClick = (event) => {
-      const year = parseInt(event.target.id);
+      const year = parseInt(event.currentTarget.id);
       const viewDate = time.setYear(this.props.selectedDate, year);
       this.setState({viewDate});
       this.props.onChange(viewDate, false);
     };
 
+    handleKeys = (e) => {
+      const { selectedDate } = this.props;
+
+      if (e.which === 37 || e.which === 38 || e.which === 39 || e.which === 40 || e.which === 13) e.preventDefault();
+
+      switch (e.which) {
+        case 13: this.props.handleSelect(); break; // enter
+        case 37: this.handleDayArrowKey(time.addDays(selectedDate, -1)); break; // left
+        case 38: this.handleDayArrowKey(time.addDays(selectedDate, -7)); break; // up
+        case 39: this.handleDayArrowKey(time.addDays(selectedDate, 1)); break; // right
+        case 40: this.handleDayArrowKey(time.addDays(selectedDate, 7)); break; // down
+        default: break;
+      }
+    }
+
+    handleDayArrowKey = (date) => {
+      this.setState({ viewDate: date });
+      this.props.onChange(date, false);
+    }
+
     changeViewMonth = (event) => {
-      const direction = event.target.id;
+      const direction = event.currentTarget.id;
       this.setState({
         direction,
         viewDate: time.addMonths(this.state.viewDate, DIRECTION_STEPS[direction])
@@ -96,6 +127,8 @@ const factory = (IconButton) => {
           <IconButton id='right' className={theme.next} icon='chevron_right' onClick={this.changeViewMonth} />
           <CssTransitionGroup transitionName={animation} transitionEnterTimeout={350} transitionLeaveTimeout={350}>
             <CalendarMonth
+              enabledDates={this.props.enabledDates}
+              disabledDates={this.props.disabledDates}
               key={this.state.viewDate.getMonth()}
               locale={this.props.locale}
               maxDate={this.props.maxDate}

@@ -1,4 +1,5 @@
-import __ReactToolbox from "../index.d.ts";
+import * as React from "react";
+import ReactToolbox from "../index";
 
 export interface TabsTheme {
   /**
@@ -23,11 +24,11 @@ export interface TabsTheme {
   tab?: string;
 }
 
-interface TabsProps extends __ReactToolbox.Props {
+interface TabsProps extends ReactToolbox.Props {
   /**
    * Children to pass through the component.
    */
-  children?: __React.ReactNode;
+  children?: React.ReactNode;
   /**
    * Disable the animation below the active tab.
    * @default false
@@ -39,6 +40,21 @@ interface TabsProps extends __ReactToolbox.Props {
    */
   index?: number;
   /**
+   * `unmounted` mode will not mount the tab content of inactive tabs.
+   * `display` mode will mount but hide inactive tabs.
+   * Consider holding state outside of the Tabs component before using `display` mode
+   * @default unmounted
+   */
+  hideMode?: 'display' | 'unmounted';
+  /**
+   * If True, the tabs will have an inverse style.
+   */
+  inverse?: boolean;
+  /**
+   * If True, the tabs will be fixed, covering the whole width.
+   */
+  fixed?: boolean;
+  /**
    * Callback function that is fired when the tab changes.
    */
   onChange?: Function;
@@ -48,7 +64,7 @@ interface TabsProps extends __ReactToolbox.Props {
   theme?: TabsTheme;
 }
 
-export class Tabs extends __React.Component<TabsProps, {}> { }
+export class Tabs extends React.Component<TabsProps, {}> { }
 
 export interface TabTheme {
   /**
@@ -69,7 +85,7 @@ export interface TabTheme {
   label?: string;
 }
 
-interface TabProps extends __ReactToolbox.Props {
+interface TabProps extends ReactToolbox.Props {
   /**
    * If true, the current component is visible.
    */
@@ -102,4 +118,4 @@ interface TabProps extends __ReactToolbox.Props {
   theme?: TabTheme;
 }
 
-export class Tab extends __React.Component<TabProps, {}> { }
+export class Tab extends React.Component<TabProps, {}> { }

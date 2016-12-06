@@ -14,6 +14,7 @@ const factory = (TableHead, TableRow) => {
       model: PropTypes.object,
       multiSelectable: PropTypes.bool,
       onChange: PropTypes.func,
+      onRowClick: PropTypes.func,
       onSelect: PropTypes.func,
       selectable: PropTypes.bool,
       selected: PropTypes.array,
@@ -42,11 +43,11 @@ const factory = (TableHead, TableRow) => {
 
     handleRowSelect = (index) => {
       if (this.props.onSelect) {
-        let newSelection = [];
+        let newSelection = [...this.props.selected];
         if (this.props.multiSelectable) {
           const position = this.props.selected.indexOf(index);
-          newSelection = this.props.selected.indexOf(index) !== -1
-            ? this.props.selected.filter((el, idx) => idx !== position)
+          newSelection = position !== -1
+            ? newSelection.filter((el, idx) => idx !== position)
             : newSelection.concat([index]);
         } else {
           newSelection = [index];
@@ -60,6 +61,12 @@ const factory = (TableHead, TableRow) => {
         this.props.onChange(index, key, value);
       }
     };
+
+    handleRowClick = (index, event) => {
+      if (this.props.onRowClick) {
+        this.props.onRowClick(index, event);
+      }
+    }
 
     renderHead () {
       if (this.props.heading) {
@@ -90,6 +97,7 @@ const factory = (TableHead, TableRow) => {
               model={model}
               onChange={onChange ? this.handleRowChange.bind(this) : undefined}
               onSelect={this.handleRowSelect.bind(this, index)}
+              onRowClick={this.handleRowClick.bind(this, index)}
               selectable={selectable}
               selected={selected.indexOf(index) !== -1}
               theme={theme}
